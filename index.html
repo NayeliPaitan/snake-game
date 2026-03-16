@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SNAKE | Blake Dev - Nayeli Paitan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/png" href="img/icon.ico">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <h1>SNAKE</h1>
+    <p>// NEON EDITION //</p>
+  </header>
+
+  <div class="scorebar">
+    <div class="score-item">
+      <div class="score-label">SCORE</div>
+      <div class="score-value" id="scoreDisplay">0</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">HIGH SCORE</div>
+      <div class="score-value hi" id="hiDisplay">0</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">LEVEL</div>
+      <div class="score-value" id="lvlDisplay">1</div>
+    </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="canvas"></canvas>
+
+    <div class="overlay" id="overlay">
+      <div class="ov-title start" id="ovTitle">SNAKE</div>
+      <div class="ov-sub" id="ovSub">USE ARROWS, WASD OR D-PAD</div>
+      <div class="ov-score hidden" id="ovScore"></div>
+      <button class="btn-play" id="btnPlay">[ START ]</button>
+    </div>
+  </div>
+  
+   <!-- D-Pad para móvil -->
+  <div class="dpad">
+    <button class="dpad-btn dpad-up"    id="dUp">▲</button>
+    <button class="dpad-btn dpad-left"  id="dLeft">◀</button>
+    <button class="dpad-btn dpad-mid"   id="dPause">⏸</button>
+    <button class="dpad-btn dpad-right" id="dRight">▶</button>
+    <button class="dpad-btn dpad-down"  id="dDown">▼</button>
+  </div>
+
+  <div class="controls">
+    <span><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> or arrows to move</span>
+    <span><span class="key">P</span> pause</span>
+  </div>
+
+<footer class="footer">
+    Hecho por <span class="footer-name">Blake Dev</span> | <span class="footer-name">Nayeli Paitan</span>
+  </footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
