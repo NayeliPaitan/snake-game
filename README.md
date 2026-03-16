@@ -6,7 +6,7 @@ Un juego de Snake clásico con estética **neon retro** construido con HTML, CSS
 
 ## 🎮 Demo
 
-> **[🕹️ Jugar en vivo](https://tu-usuario.github.io/snake-neon)**
+> **[🕹️ Jugar en vivo](https://nayelipaitan.github.io/snake-neon)**
 
 ---
 
