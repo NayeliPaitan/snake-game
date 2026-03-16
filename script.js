@@ -65,7 +65,7 @@ function step() {
     const newLevel = Math.floor(score / 50) + 1;
     if (newLevel > level) {
       level = newLevel;
-      speed = Math.max(55, 120 - (level - 1) * 10);
+      speed = Math.max(55, 100 - (level - 1) * 10);
       lvlEl.textContent = level;
       restartLoop();
     }
