@@ -1,13 +1,15 @@
-const canvas  = document.getElementById('canvas');
-const ctx     = canvas.getContext('2d');
-const overlay = document.getElementById('overlay');
-const ovTitle = document.getElementById('ovTitle');
-const ovSub   = document.getElementById('ovSub');
-const ovScore = document.getElementById('ovScore');
-const btnPlay = document.getElementById('btnPlay');
-const scoreEl = document.getElementById('scoreDisplay');
-const hiEl    = document.getElementById('hiDisplay');
-const lvlEl   = document.getElementById('lvlDisplay');
+const canvas   = document.getElementById('canvas');
+const ctx      = canvas.getContext('2d');
+const overlay  = document.getElementById('overlay');
+const ovTitle  = document.getElementById('ovTitle');
+const ovSub    = document.getElementById('ovSub');
+const ovScore  = document.getElementById('ovScore');
+const btnPlay  = document.getElementById('btnPlay');
+const scoreEl  = document.getElementById('scoreDisplay');
+const hiEl     = document.getElementById('hiDisplay');
+const lvlEl    = document.getElementById('lvlDisplay');
+const feedback = document.getElementById('swipeFeedback');
+const btnPauseM= document.getElementById('btnPauseMobile');
 
 const COLS = 20, ROWS = 20;
 
@@ -179,7 +181,22 @@ function togglePause() {
   }
 }
 
-// Keyboard
+// ─── Feedback visual de swipe ────────────────────────────────────────────────
+let feedbackTimer = null;
+function showSwipeFeedback(dirX, dirY) {
+  let color = 'rgba(0,255,136,0.12)';
+  let gradient = '';
+  if (dirX > 0)      gradient = 'to left, transparent, '  + color;
+  else if (dirX < 0) gradient = 'to right, transparent, ' + color;
+  else if (dirY > 0) gradient = 'to top, transparent, '   + color;
+  else if (dirY < 0) gradient = 'to bottom, transparent, '+ color;
+  feedback.style.background = `linear-gradient(${gradient})`;
+  feedback.classList.add('active');
+  clearTimeout(feedbackTimer);
+  feedbackTimer = setTimeout(() => feedback.classList.remove('active'), 180);
+}
+
+// ─── Teclado ─────────────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   switch (e.key) {
     case 'ArrowUp':    case 'w': case 'W': if (dir.y !==  1) nextDir={x:0,y:-1}; e.preventDefault(); break;
@@ -190,34 +207,49 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// D-Pad buttons
-document.getElementById('btnPlay').addEventListener('click', startGame);
-document.getElementById('dUp').addEventListener('click',    () => { if(dir.y !== 1)  nextDir={x:0,y:-1}; });
-document.getElementById('dDown').addEventListener('click',  () => { if(dir.y !== -1) nextDir={x:0,y:1};  });
-document.getElementById('dLeft').addEventListener('click',  () => { if(dir.x !== 1)  nextDir={x:-1,y:0}; });
-document.getElementById('dRight').addEventListener('click', () => { if(dir.x !== -1) nextDir={x:1,y:0};  });
-document.getElementById('dPause').addEventListener('click', togglePause);
+// ─── Botones ──────────────────────────────────────────────────────────────────
+btnPlay.addEventListener('click', startGame);
+btnPauseM.addEventListener('click', togglePause);
 
-// Swipe en el canvas
-let tx = 0, ty = 0;
-canvas.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; e.preventDefault(); }, { passive: false });
-canvas.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - tx;
-  const dy = e.changedTouches[0].clientY - ty;
-  if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
-  if (Math.abs(dx) > Math.abs(dy)) {
-    if (dx > 0 && dir.x !== -1) nextDir = {x:1,y:0};
-    else if (dx < 0 && dir.x !== 1) nextDir = {x:-1,y:0};
-  } else {
-    if (dy > 0 && dir.y !== -1) nextDir = {x:0,y:1};
-    else if (dy < 0 && dir.y !== 1) nextDir = {x:0,y:-1};
-  }
+// ─── Swipe táctil ────────────────────────────────────────────────────────────
+let tx = 0, ty = 0, tMoved = false;
+
+canvas.addEventListener('touchstart', e => {
+  tx = e.touches[0].clientX;
+  ty = e.touches[0].clientY;
+  tMoved = false;
   e.preventDefault();
 }, { passive: false });
 
-// Canvas responsivo
+canvas.addEventListener('touchmove', e => {
+  if (tMoved) { e.preventDefault(); return; }
+  const dx = e.touches[0].clientX - tx;
+  const dy = e.touches[0].clientY - ty;
+  if (Math.sqrt(dx*dx + dy*dy) < 18) { e.preventDefault(); return; }
+  tMoved = true;
+  applySwipe(dx, dy);
+  e.preventDefault();
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  // Tap simple = pausar / reanudar
+  if (!tMoved && running) togglePause();
+  e.preventDefault();
+}, { passive: false });
+
+function applySwipe(dx, dy) {
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 0 && dir.x !== -1)      { nextDir = {x:1,y:0};  showSwipeFeedback(1,0);  }
+    else if (dx < 0 && dir.x !== 1)  { nextDir = {x:-1,y:0}; showSwipeFeedback(-1,0); }
+  } else {
+    if (dy > 0 && dir.y !== -1)      { nextDir = {x:0,y:1};  showSwipeFeedback(0,1);  }
+    else if (dy < 0 && dir.y !== 1)  { nextDir = {x:0,y:-1}; showSwipeFeedback(0,-1); }
+  }
+}
+
+// ─── Canvas responsivo ───────────────────────────────────────────────────────
 function resizeCanvas() {
-  const size = Math.min(400, Math.floor(window.innerWidth * 0.9));
+  const size = Math.min(400, Math.floor(window.innerWidth * 0.92));
   canvas.width  = size;
   canvas.height = size;
   if (!running || paused) draw();
