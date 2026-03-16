@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>SNAKE | Blake Dev - Nayeli Paitan</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
   <link rel="icon" type="image/png" href="img/icon.ico">
@@ -33,22 +33,21 @@
 
   <div class="canvas-wrap">
     <canvas id="canvas"></canvas>
+    <div class="swipe-feedback" id="swipeFeedback"></div>
 
     <div class="overlay" id="overlay">
       <div class="ov-title start" id="ovTitle">SNAKE</div>
-      <div class="ov-sub" id="ovSub">USE ARROWS, WASD OR D-PAD</div>
+      <div class="swipe-hint">
+        <div class="swipe-arrows">↑ ↓ ← →</div>
+        <div class="ov-sub" id="ovSub">SWIPE TO MOVE &nbsp;|&nbsp; WASD / ARROWS</div>
+      </div>
       <div class="ov-score hidden" id="ovScore"></div>
       <button class="btn-play" id="btnPlay">[ START ]</button>
     </div>
   </div>
-  
-   <!-- D-Pad para móvil -->
-  <div class="dpad">
-    <button class="dpad-btn dpad-up"    id="dUp">▲</button>
-    <button class="dpad-btn dpad-left"  id="dLeft">◀</button>
-    <button class="dpad-btn dpad-mid"   id="dPause">⏸</button>
-    <button class="dpad-btn dpad-right" id="dRight">▶</button>
-    <button class="dpad-btn dpad-down"  id="dDown">▼</button>
+
+  <div class="pause-bar">
+    <button class="btn-pause" id="btnPauseMobile">⏸ &nbsp;PAUSE</button>
   </div>
 
   <div class="controls">
@@ -56,7 +55,7 @@
     <span><span class="key">P</span> pause</span>
   </div>
 
-<footer class="footer">
+  <footer class="footer">
     Hecho por <span class="footer-name">Blake Dev</span> | <span class="footer-name">Nayeli Paitan</span>
   </footer>
 
